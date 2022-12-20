@@ -7,6 +7,13 @@
 
 import SwiftUI
 
+
+enum Status: String {
+    case Start
+    case Pause
+    case Resume
+}
+
 struct ContentView: View {
     
     @State var progresValue: CGFloat = 0.0
@@ -14,6 +21,8 @@ struct ContentView: View {
     @State var setMin: Int = 0
     @State var displayMin: Int = 0
     @State var displaySec: Int = 0
+    @State var status = Status.Start
+    @State var sec = 0
     
     var body: some View {
         VStack {
@@ -52,37 +61,63 @@ struct ContentView: View {
                 
                 Section {
                     HStack(alignment: .center) {
-                        Button("Start") {
-                            if setMin == 0 {
-                                return
-                            }
-                            var sec = 0
+                        Button("Cancel") {
                             timer?.invalidate()
                             displayMin = setMin
                             displaySec = 0
                             progresValue = 0
-                            
-                            timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { timer in
-                                if displaySec == 0 {
-                                    displayMin -= 1
-                                    displaySec = 59
-                                } else {
-                                    displaySec -= 1
-                                }
-                                progresValue += 1 / CGFloat((60 * setMin))
-                                sec += 1
-                                if sec == (60 * setMin) {
-                                    timer.invalidate()
-                                }
+                            status = .Start
+                        }
+                        .buttonStyle(.borderedProminent)
+                        .disabled(status == .Start)
+                        
+                        Spacer()
+                        
+                        Button("\(status.rawValue)") {
+                            switch status {
+                            case .Start, .Resume:
+                                startTimer()
+                            case .Pause:
+                                timer?.invalidate()
+                                status = .Resume
                             }
                         }
                         .buttonStyle(.borderedProminent)
-                        Button("Stop") {
-                            timer?.invalidate()
-                        }
-                        .buttonStyle(.borderedProminent)
+                        .disabled(setMin == 0)
                     }
                 }
+            }
+        }
+    }
+    
+    
+    func startTimer() {
+        if setMin == 0 {
+            return
+        }
+        
+        timer?.invalidate()
+        
+        if status == .Start {
+            displayMin = setMin
+            displaySec = 0
+            progresValue = 0
+            sec = 0
+        }
+        status = .Pause
+        
+        timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { timer in
+            if displaySec == 0 {
+                displayMin -= 1
+                displaySec = 59
+            } else {
+                displaySec -= 1
+            }
+            progresValue += 1 / CGFloat((60 * setMin))
+            self.sec += 1
+            if sec == (60 * setMin) {
+                timer.invalidate()
+                status = .Start
             }
         }
     }
