@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import AudioToolbox
 
 class TimerObject: ObservableObject {
 
@@ -50,6 +51,7 @@ class TimerObject: ObservableObject {
             if self.sec == (60 * setMin) {
                 self.invalidate()
                 self.status = .Start
+                AudioServicesPlayAlertSound(SystemSoundID(kSystemSoundID_Vibrate))
             }
         }
     }
