@@ -28,7 +28,7 @@ struct ContentView: View {
                     .foregroundColor(.blue)
                     .frame(width: 200, height: 200)
                     .rotationEffect(Angle(degrees: -90))
-                    .animation(.linear(duration: 1))
+                    .animation(.linear(duration: 1.0), value: timer.progresValue)
                 
                 Text("\(timer.displayMin)min \(timer.displaySec)sec")
                     .dynamicTypeSize(.large)
