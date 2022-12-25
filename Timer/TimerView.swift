@@ -1,5 +1,5 @@
 //
-//  ContentView.swift
+//  TimerView.swift
 //  Timer
 //
 //  Created by 土橋正晴 on 2022/12/19.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct ContentView: View {
+struct TimerView: View {
     
     @StateObject private var timer = TimerObject()
     
@@ -82,6 +82,6 @@ struct ContentView: View {
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
-        ContentView()
+        TimerView()
     }
 }
