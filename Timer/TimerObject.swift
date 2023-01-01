@@ -7,6 +7,7 @@
 
 import Foundation
 import AudioToolbox
+import UIKit
 
 class TimerObject: ObservableObject {
 
@@ -28,9 +29,7 @@ class TimerObject: ObservableObject {
         if setMin == 0 {
             return
         }
-        
-        timer?.invalidate()
-        
+        self.invalidate()
         if status == .Start {
             displayMin = setMin
             displaySec = 0
@@ -38,6 +37,7 @@ class TimerObject: ObservableObject {
             sec = 0
         }
         status = .Pause
+        UIApplication.shared.isIdleTimerDisabled = true
         
         timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { timer in
             if self.displaySec == 0 {
@@ -58,5 +58,6 @@ class TimerObject: ObservableObject {
     
     func invalidate() {
         timer?.invalidate()
+        UIApplication.shared.isIdleTimerDisabled = false
     }
 }
